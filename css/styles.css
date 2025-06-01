@@ -120,3 +120,42 @@ footer {
 .bounce {
   animation: bounce 2s ease-in-out infinite;
 }
+
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    overflow: auto;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 20px;
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  .preview {
+    width: 100%;
+    padding: 20px;
+  }
+
+  #qr-preview {
+    max-width: 90vw;
+    height: auto;
+  }
+
+  input, select {
+    font-size: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  footer {
+    position: static;
+    margin-top: 20px;
+    text-align: center;
+  }
+}
