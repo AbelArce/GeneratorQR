@@ -57,7 +57,9 @@ async function actualizarQR() {
 
   console.log(`Texto: ${texto}`);
   console.log(`Colores -> Dots: ${color}, Fondo: ${bgColor}`);
-  console.log(`Formas -> Puntos: ${dotType}, Esquinas: ${cornerType}, Ojos: ${eyeBallType}`);
+  console.log(
+    `Formas -> Puntos: ${dotType}, Esquinas: ${cornerType}, Ojos: ${eyeBallType}`
+  );
   console.log(`Tamaño: ${size}px, Margen: ${margin}px, Animación: ${animate}`);
 
   const logoFile = document.getElementById("qr-logo").files[0];
@@ -101,6 +103,13 @@ async function actualizarQR() {
 
   qrCode.update(updateOptions);
   aplicarAnimacion(animate);
+  // Mostrar u ocultar botón de descarga
+  const downloadBtn = document.getElementById("download-btn");
+  if (texto.trim()) {
+    downloadBtn.style.display = "inline-block";
+  } else {
+    downloadBtn.style.display = "none";
+  }
   console.log("✔️ QR actualizado.");
 }
 
