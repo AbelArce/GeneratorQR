@@ -25,9 +25,12 @@
 
     <div class="form-group">
       <label for="qr-text">Texto / URL</label>
-      <input type="text" id="qr-text" placeholder="https://ejemplo.com" value="https://ejemplo.com" />
+      <input type="search" id="qr-text" placeholder="https://ejemplo.com" value="" />
     </div>
-
+    <div class="form-group">
+      <label for="qr-logo">Logo personalizado</label>
+      <input type="file" id="qr-logo" accept="image/*" />
+    </div>
     <div class="color-group">
       <div class="form-group">
         <label for="qr-color">Color del QR</label>
@@ -86,21 +89,15 @@
 
 
 
-
-    <div class="form-group">
-      <label for="qr-logo">Logo personalizado</label>
-      <input type="file" id="qr-logo" accept="image/*" />
-    </div>
-
     <div class="size-group">
       <div class="form-group">
         <label for="qr-size">Tamaño (px)</label>
-        <input type="number" id="qr-size" value="300" min="100" max="600" />
+        <input type="number" id="qr-size" value="140" min="100" max="600" />
       </div>
 
       <div class="form-group">
         <label for="qr-margin">Margen (px)</label>
-        <input type="number" id="qr-margin" value="10" min="0" max="50" />
+        <input type="number" id="qr-margin" value="1" min="0" max="50" />
       </div>
     </div>
 
