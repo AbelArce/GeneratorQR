@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>🧠 Generador QR</title>
+  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #00f2fe, #4facfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 30px;
+    }
+
+    input, select {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    button {
+      background: #00f2fe;
+      color: #000;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #qr-preview {
+      margin-top: 20px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Generador QR ✨</h1>
+
+  <div class="input-group">
+    <label for="qr-text">Texto o URL</label>
+    <input type="text" id="qr-text" placeholder="https://ejemplo.com o Abel Salazar Arce">
+
+    <label for="qr-color">Color del QR</label>
+    <input type="color" id="qr-color" value="#000000">
+
+    <label for="qr-bg-color">Color de fondo</label>
+    <input type="color" id="qr-bg-color" value="#ffffff">
+
+    <label for="qr-logo">Logo (opcional)</label>
+    <input type="file" id="qr-logo" accept="image/*">
+  </div>
+
+  <button onclick="actualizarQR()">Actualizar QR</button>
+  <button onclick="descargarQR()">Descargar PNG</button>
+
+  <div id="qr-preview"></div>
+
+  <script>
+    let qrCode = new QRCodeStyling({
+      width: 300,
+      height: 300,
+      type: "png",
+      data: "https://ejemplo.com o Abel Salazar Arce",
+      image: "",
+      dotsOptions: {
+        color: "#000000",
+        type: "rounded"
+      },
+      backgroundOptions: {
+        color: "#ffffff"
+      },
+      imageOptions: {
+        crossOrigin: "anonymous",
+        margin: 10
+      }
+    });
+
+    qrCode.append(document.getElementById("qr-preview"));
+
+    function actualizarQR() {
+      const texto = document.getElementById("qr-text").value || "hhttps://ejemplo.com o Abel Salazar Arce";
+      const color = document.getElementById("qr-color").value;
+      const bgColor = document.getElementById("qr-bg-color").value;
+      const logoFile = document.getElementById("qr-logo").files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        qrCode.update({
+          data: texto,
+          image: logoFile ? reader.result : "",
+          dotsOptions: { color },
+          backgroundOptions: { color: bgColor }
+        });
+      };
+
+      if (logoFile) {
+        reader.readAsDataURL(logoFile);
+      } else {
+        qrCode.update({
+          data: texto,
+          image: "",
+          dotsOptions: { color },
+          backgroundOptions: { color: bgColor }
+        });
+      }
+    }
+
+    function descargarQR() {
+      qrCode.download({ name: "codigo-qr", extension: "png" });
+    }
+  </script>
+
+</body>
+</html>
