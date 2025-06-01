@@ -159,3 +159,95 @@ footer {
     text-align: center;
   }
 }
+
+
+/* Agrupar campos de color en móviles */
+.color-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.color-group .form-group {
+  flex: 1 1 calc(50% - 10px);
+  margin: 0;
+}
+
+/* Centrar título */
+@media (max-width: 768px) {
+  .sidebar h1 {
+    text-align: center;
+  }
+
+  /* QR arriba, formulario abajo */
+  body {
+    flex-direction: column-reverse;
+  }
+
+  .sidebar {
+    order: 2;
+  }
+
+  .preview {
+    order: 1;
+    padding: 20px 10px;
+  }
+
+  .color-group {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #qr-preview {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+.size-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.size-group .form-group {
+  flex: 1 1 calc(50% - 10px);
+  margin: 0;
+}
+
+.corner-animate-group,
+.dot-eye-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.corner-animate-group .form-group,
+.dot-eye-group .form-group {
+  flex: 1 1 calc(50% - 10px);
+  margin: 0;
+}
+
+#download-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #00f2fe;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#download-btn:hover {
+  background-color: #1565c0;
+}
+
+.preview {
+  text-align: center;
+}

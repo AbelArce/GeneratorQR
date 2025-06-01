@@ -1,3 +1,4 @@
+// js/app.js
 const qr = new QRCodeStyling({
   width: 300,
   height: 300,
