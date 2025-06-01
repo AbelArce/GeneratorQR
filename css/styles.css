@@ -27,6 +27,8 @@ body {
   margin-bottom: 10px;
   background: linear-gradient(to right, #00f2fe, #4facfe);
   -webkit-background-clip: text;
+  text-align: center;
+  background-clip: text; /* Added for compatibility */
   -webkit-text-fill-color: transparent;
 }
 
