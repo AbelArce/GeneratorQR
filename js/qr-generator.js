@@ -1,8 +1,9 @@
+// js/qr-generator.js
+
 console.log("⚡️ Inicializando QR Generator...");
 
-const DEFAULT_IMAGE = "https://images.vexels.com/media/users/3/139140/isolated/lists/faaa3b02a85ca452598dd699c33b9b5c-diseno-de-huella-digital-realista.png";
-
-let backgroundImageData = null;
+const DEFAULT_IMAGE =
+  "https://images.vexels.com/media/users/3/139140/isolated/lists/faaa3b02a85ca452598dd699c33b9b5c-diseno-de-huella-digital-realista.png";
 
 let qrCode = new QRCodeStyling({
   width: 300,
@@ -12,29 +13,38 @@ let qrCode = new QRCodeStyling({
   image: DEFAULT_IMAGE,
   dotsOptions: {
     color: "#000000",
-    type: "dots"
+    type: "dots",
   },
   cornersSquareOptions: {
-    type: "extra-rounded"
+    type: "extra-rounded",
   },
   cornersDotOptions: {
-    type: "square"
+    type: "square",
   },
   backgroundOptions: {
     color: "#ffffff",
-    image: null
+    // Aquí quitamos el image: null
   },
   imageOptions: {
     crossOrigin: "anonymous",
-    margin: 10
-  }
+    margin: 10,
+  },
 });
 
 qrCode.append(document.getElementById("qr-preview"));
 
-function actualizarQR() {
+function leerArchivoComoDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("Error al leer archivo"));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function actualizarQR() {
   console.log("🔄 Actualizando QR...");
-  
+
   const texto = document.getElementById("qr-text").value;
   const color = document.getElementById("qr-color").value;
   const bgColor = document.getElementById("qr-bg-color").value;
@@ -51,76 +61,53 @@ function actualizarQR() {
   console.log(`Tamaño: ${size}px, Margen: ${margin}px, Animación: ${animate}`);
 
   const logoFile = document.getElementById("qr-logo").files[0];
-  const bgFile = document.getElementById("qr-background-image").files[0];
+
+  let logoData = DEFAULT_IMAGE;
+
+  try {
+    if (logoFile) {
+      console.log("📁 Logo personalizado detectado, cargando...");
+      logoData = await leerArchivoComoDataURL(logoFile);
+      console.log("✅ Logo cargado correctamente.");
+    }
+  } catch (err) {
+    console.error("❌ Error al leer archivo de logo:", err);
+  }
 
   const updateOptions = {
     width: size,
     height: size,
     data: texto,
-    image: DEFAULT_IMAGE,
+    image: logoData,
     dotsOptions: {
       color,
-      type: dotType
+      type: dotType,
     },
     cornersSquareOptions: {
-      type: cornerType
+      type: cornerType,
     },
     cornersDotOptions: {
-      type: eyeBallType
+      type: eyeBallType,
     },
     backgroundOptions: {
       color: bgColor,
-      image: backgroundImageData
+      // sin imagen de fondo
     },
     imageOptions: {
       crossOrigin: "anonymous",
-      margin: margin
-    }
+      margin,
+    },
   };
 
-  if (logoFile) {
-    console.log("📁 Logo personalizado detectado, cargando...");
-    const readerLogo = new FileReader();
-    readerLogo.onload = () => {
-      console.log("✅ Logo cargado correctamente.");
-      updateOptions.image = readerLogo.result;
-      qrCode.update(updateOptions);
-      aplicarAnimacion(animate);
-      console.log("✔️ QR actualizado con logo.");
-    };
-    readerLogo.onerror = () => {
-      console.error("❌ Error al cargar el logo personalizado.");
-    };
-    readerLogo.readAsDataURL(logoFile);
-  } else {
-    updateOptions.image = DEFAULT_IMAGE;
-    if (bgFile) {
-      console.log("📁 Imagen de fondo detectada, cargando...");
-      const readerBg = new FileReader();
-      readerBg.onload = () => {
-        backgroundImageData = `url(${readerBg.result})`;
-        updateOptions.backgroundOptions.image = backgroundImageData;
-        qrCode.update(updateOptions);
-        aplicarAnimacion(animate);
-        console.log("✔️ QR actualizado con imagen de fondo.");
-      };
-      readerBg.onerror = () => {
-        console.error("❌ Error al cargar la imagen de fondo.");
-      };
-      readerBg.readAsDataURL(bgFile);
-    } else {
-      backgroundImageData = null;
-      updateOptions.backgroundOptions.image = null;
-      qrCode.update(updateOptions);
-      aplicarAnimacion(animate);
-      console.log("✔️ QR actualizado sin imagen de fondo ni logo.");
-    }
-  }
+  qrCode.update(updateOptions);
+  aplicarAnimacion(animate);
+  console.log("✔️ QR actualizado.");
 }
 
 function aplicarAnimacion(animacion) {
   const preview = document.getElementById("qr-preview");
   preview.classList.remove("spin", "pulse", "bounce");
+
   if (animacion !== "none") {
     preview.classList.add(animacion);
     console.log(`🎬 Animación aplicada: ${animacion}`);
@@ -131,22 +118,28 @@ function aplicarAnimacion(animacion) {
 
 function descargarQR() {
   console.log("⬇️ Descargando QR...");
-  qrCode.getRawData("png").then(blob => {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "qr-code.png";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    console.log("✅ QR descargado correctamente.");
-  }).catch(err => {
-    console.error("❌ Error al descargar el QR:", err);
-  });
+  qrCode
+    .getRawData("png")
+    .then((blob) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "qr-code.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      console.log("✅ QR descargado correctamente.");
+    })
+    .catch((err) => {
+      console.error("❌ Error al descargar el QR:", err);
+    });
 }
 
 // Eventos para actualización instantánea
-document.querySelectorAll("input, select").forEach(el => {
+document.querySelectorAll("input, select").forEach((el) => {
   el.addEventListener("input", actualizarQR);
 });
+
+// Asumo que tienes un botón para descargar con id="download-btn"
+document.getElementById("download-btn")?.addEventListener("click", descargarQR);
 
 actualizarQR();
