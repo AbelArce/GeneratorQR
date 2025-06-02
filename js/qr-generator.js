@@ -669,6 +669,418 @@ function crearPrevisualizadorModal() {
     </div>
   `;
 
+  // Agregar el modal al DOM
+  document.body.appendChild(modal);
+
+  // ===== EFECTOS HOVER =====
+
+  // Efectos hover para botón cerrar
+  const closeBtn = modal.querySelector("#qr-preview-close");
+  closeBtn.addEventListener("mouseenter", () => {
+    closeBtn.style.background = "rgba(239, 68, 68, 0.2)";
+    closeBtn.style.borderColor = "rgba(239, 68, 68, 0.5)";
+    closeBtn.style.transform = "rotate(90deg) scale(1.1)";
+    closeBtn.style.boxShadow = "0 4px 15px rgba(239, 68, 68, 0.3)";
+  });
+  closeBtn.addEventListener("mouseleave", () => {
+    closeBtn.style.background = "rgba(239, 68, 68, 0.1)";
+    closeBtn.style.borderColor = "rgba(239, 68, 68, 0.3)";
+    closeBtn.style.transform = "none";
+    closeBtn.style.boxShadow = "none";
+  });
+
+  // Efectos hover para botones de navegación
+  [
+    modal.querySelector("#qr-preview-prev"),
+    modal.querySelector("#qr-preview-next"),
+  ].forEach((btn) => {
+    btn.addEventListener("mouseenter", () => {
+      btn.style.background = "rgba(0, 217, 255, 0.1)";
+      btn.style.borderColor = "#00d9ff";
+      btn.style.transform = "translateY(-2px)";
+      btn.style.boxShadow = "0 6px 20px rgba(0, 217, 255, 0.3)";
+    });
+    btn.addEventListener("mouseleave", () => {
+      btn.style.background = "rgba(26, 26, 46, 0.9)";
+      btn.style.borderColor = "rgba(0, 217, 255, 0.3)";
+      btn.style.transform = "none";
+      btn.style.boxShadow = "none";
+    });
+  });
+
+  // Efectos hover para botón zoom
+  const zoomBtn = modal.querySelector("#qr-preview-zoom");
+  zoomBtn.addEventListener("mouseenter", () => {
+    zoomBtn.style.background = "rgba(255, 152, 0, 0.2)";
+    zoomBtn.style.borderColor = "rgba(255, 152, 0, 0.5)";
+    zoomBtn.style.transform = "translateY(-2px)";
+    zoomBtn.style.boxShadow = "0 6px 20px rgba(255, 152, 0, 0.3)";
+  });
+  zoomBtn.addEventListener("mouseleave", () => {
+    zoomBtn.style.background = "rgba(255, 152, 0, 0.1)";
+    zoomBtn.style.borderColor = "rgba(255, 152, 0, 0.3)";
+    zoomBtn.style.transform = "none";
+    zoomBtn.style.boxShadow = "none";
+  });
+
+  // Efectos hover para botón descargar
+  const downloadBtn = modal.querySelector("#qr-preview-download");
+  downloadBtn.addEventListener("mouseenter", () => {
+    downloadBtn.style.transform = "translateY(-2px)";
+    downloadBtn.style.boxShadow = "0 8px 25px rgba(0, 217, 255, 0.4)";
+  });
+  downloadBtn.addEventListener("mouseleave", () => {
+    downloadBtn.style.transform = "none";
+    downloadBtn.style.boxShadow = "none";
+  });
+
+  // Event listeners del previsualizador
+  configurarEventListenersPrevisualizador();
+}
+
+// Configurar todos los event listeners del previsualizador
+function configurarEventListenersPrevisualizador() {
+  const modal = document.getElementById("qr-preview-modal");
+  const closeBtn = document.getElementById("qr-preview-close");
+  const prevBtn = document.getElementById("qr-preview-prev");
+  const nextBtn = document.getElementById("qr-preview-next");
+  const zoomBtn = document.getElementById("qr-preview-zoom");
+  const downloadBtn = document.getElementById("qr-preview-download");
+  const img = document.getElementById("qr-preview-img");
+
+  // Cerrar modal
+  if (closeBtn) {
+    closeBtn.addEventListener("click", cerrarPrevisualizador);
+  }
+
+  // Cerrar al hacer clic fuera
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        cerrarPrevisualizador();
+      }
+    });
+  }
+
+  // Navegación
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      if (currentPreviewIndex > 0) {
+        currentPreviewIndex--;
+        actualizarPrevisualizador();
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (currentPreviewIndex < previewQRData.length - 1) {
+        currentPreviewIndex++;
+        actualizarPrevisualizador();
+      }
+    });
+  }
+
+  // Zoom
+  if (zoomBtn && img) {
+    let isZoomed = false;
+    zoomBtn.addEventListener("click", () => {
+      if (!isZoomed) {
+        img.style.transform = "scale(2)";
+        img.style.cursor = "zoom-out";
+        zoomBtn.textContent = "🔍 Normal";
+        isZoomed = true;
+      } else {
+        img.style.transform = "scale(1)";
+        img.style.cursor = "zoom-in";
+        zoomBtn.textContent = "🔍 Zoom";
+        isZoomed = false;
+      }
+    });
+
+    // Zoom con clic en imagen
+    img.addEventListener("click", () => {
+      zoomBtn.click();
+    });
+  }
+
+  // Descargar QR actual
+  if (downloadBtn) {
+    downloadBtn.addEventListener("click", descargarQRActual);
+  }
+
+  // Navegación con teclado
+  document.addEventListener("keydown", (e) => {
+    if (modal && modal.style.display === "flex") {
+      switch (e.key) {
+        case "Escape":
+          cerrarPrevisualizador();
+          break;
+        case "ArrowLeft":
+          prevBtn?.click();
+          break;
+        case "ArrowRight":
+          nextBtn?.click();
+          break;
+      }
+    }
+  });
+}
+
+// Función para cerrar el previsualizador
+function cerrarPrevisualizador() {
+  const modal = document.getElementById("qr-preview-modal");
+  if (modal) {
+    modal.style.opacity = "0";
+    modal.style.visibility = "hidden";
+    setTimeout(() => {
+      modal.style.display = "none";
+      modal.classList.add("hidden");
+    }, 300);
+  }
+}
+
+// Función para descargar el QR actual del previsualizador
+async function descargarQRActual() {
+  if (currentPreviewIndex < 0 || currentPreviewIndex >= previewQRData.length) {
+    console.error("❌ Índice de QR inválido para descarga.");
+    return;
+  }
+
+  try {
+    const currentQRData = previewQRData[currentPreviewIndex];
+    const blob = await currentQRData.qr.getRawData("png");
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `qr-masivo-${currentQRData.index}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    console.log(`✅ QR #${currentQRData.index} descargado correctamente.`);
+  } catch (err) {
+    console.error("❌ Error al descargar QR del previsualizador:", err);
+  }
+}
+
+// Funciones del modal antiguo (mantener compatibilidad)
+function abrirQRModal(dataURL) {
+  const modal = document.getElementById("qr-modal");
+  const img = document.getElementById("qr-modal-img");
+  if (modal && img) {
+    img.src = dataURL;
+    modal.classList.remove("hidden");
+  }
+}
+
+function cerrarQRModal() {
+  const modal = document.getElementById("qr-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
+
+// Función de limpieza al cambiar de pestaña
+function limpiarPrevisualizador() {
+  const modal = document.getElementById("qr-preview-modal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.add("hidden");
+  }
+  currentPreviewIndex = 0;
+  previewQRData = [];
+}
+/*
+// Función para crear el modal del previsualizador
+function crearPrevisualizadorModal() {
+  // Verificar si ya existe
+  if (document.getElementById("qr-preview-modal")) return;
+
+  const modal = document.createElement("div");
+  modal.id = "qr-preview-modal";
+  modal.className = "hidden"; // Añadir clase hidden por defecto
+  modal.style.cssText = `
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 35, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  `;
+
+  modal.innerHTML = `
+    <div style="
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 217, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 90vw;
+      max-height: 90vh;
+      min-width: 500px;
+      overflow: auto;
+      position: relative;
+      box-shadow: 
+        0 25px 70px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    ">
+      <!-- Botón cerrar -->
+      <button id="qr-preview-close" style="
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      ">×</button>
+      
+      <!-- Contador y datos -->
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="
+          color: #00d9ff;
+          font-weight: 600;
+          font-size: 1.1rem;
+          background: rgba(15, 15, 35, 0.8);
+          padding: 0.75rem 1.5rem;
+          border-radius: 20px;
+          border: 1px solid rgba(0, 217, 255, 0.3);
+          backdrop-filter: blur(10px);
+          margin-bottom: 1rem;
+          display: inline-block;
+        ">
+          QR #<span id="qr-preview-counter">1 / 1</span>
+        </div>
+        <p style="
+          margin: 0;
+          font-size: 0.9rem;
+          color: #e4e4e7;
+          word-break: break-all;
+          max-width: 400px;
+          margin: 0 auto;
+          background: rgba(15, 15, 35, 0.6);
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        " id="qr-preview-data"></p>
+      </div>
+      
+      <!-- Imagen del QR con zoom -->
+      <div style="
+        text-align: center; 
+        margin-bottom: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(0, 217, 255, 0.2);
+        border-radius: 16px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+      ">
+        <img id="qr-preview-img" style="
+          max-width: 100%;
+          height: auto;
+          cursor: zoom-in;
+          transition: transform 0.3s ease;
+          border-radius: 8px;
+        " />
+      </div>
+      
+      <!-- Controles -->
+      <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      ">
+        <!-- Navegación -->
+        <div style="display: flex; gap: 0.75rem;">
+          <button id="qr-preview-prev" style="
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">← Anterior</button>
+          
+          <button id="qr-preview-next" style="
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">Siguiente →</button>
+        </div>
+        
+        <!-- Zoom y descarga -->
+        <div style="display: flex; gap: 0.75rem;">
+          <button id="qr-preview-zoom" style="
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            color: #ff9800;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">🔍 Zoom</button>
+          
+          <button id="qr-preview-download" style="
+            background: linear-gradient(135deg, #00d9ff, #0099cc);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">⬇️ Descargar</button>
+        </div>
+      </div>
+    </div>
+  `;
+
 
   
   document.body.appendChild(modal);
@@ -830,7 +1242,7 @@ function limpiarPrevisualizador() {
   currentPreviewIndex = 0;
   previewQRData = [];
 }
-
+*/
 // Inicializar
 actualizarQR();
 
@@ -881,21 +1293,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.getElementById("export-massive-btn").addEventListener("click", async () => {
-  const zip = new JSZip();
+document
+  .getElementById("export-massive-btn")
+  .addEventListener("click", async () => {
+    const zip = new JSZip();
 
-  const canvases = massiveContainer.querySelectorAll("canvas");
-  if (canvases.length === 0) {
-    alert("No hay QRs generados para exportar");
-    return;
-  }
+    const canvases = massiveContainer.querySelectorAll("canvas");
+    if (canvases.length === 0) {
+      alert("No hay QRs generados para exportar");
+      return;
+    }
 
-  canvases.forEach((canvas, index) => {
-    const dataUrl = canvas.toDataURL("image/png");
-    const base64 = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
-    zip.file(`qr_${index + 1}.png`, base64, { base64: true });
+    canvases.forEach((canvas, index) => {
+      const dataUrl = canvas.toDataURL("image/png");
+      const base64 = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+      zip.file(`qr_${index + 1}.png`, base64, { base64: true });
+    });
+
+    const content = await zip.generateAsync({ type: "blob" });
+    saveAs(content, "qr-masivos.zip");
   });
-
-  const content = await zip.generateAsync({ type: "blob" });
-  saveAs(content, "qr-masivos.zip");
-});
