@@ -198,7 +198,7 @@ function switchTab(activeTab, inactiveTab, activeSection, inactiveSection) {
   inactiveSection.classList.remove("active");
 
   // Limpiar previsualizador al cambiar de pestaña
-  limpiarPrevisualizador();
+  //limpiarPrevisualizador();
 
   // Mostrar botón flotante SOLO si la pestaña activa es la masiva Y hay QRs generados
   if (activeSection.id === "massive-qr-section") {
@@ -880,7 +880,7 @@ function cerrarQRModal() {
     modal.classList.add("hidden");
   }
 }
-
+/*
 // Función de limpieza al cambiar de pestaña
 function limpiarPrevisualizador() {
   const modal = document.getElementById("qr-preview-modal");
@@ -891,6 +891,8 @@ function limpiarPrevisualizador() {
   currentPreviewIndex = 0;
   previewQRData = [];
 }
+
+*/
 /*
 // Función para crear el modal del previsualizador
 function crearPrevisualizadorModal() {
