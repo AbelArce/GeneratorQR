@@ -481,7 +481,6 @@ async function actualizarPrevisualizador() {
 }
 
 // Función para crear el modal del previsualizador
-// Función para crear el modal del previsualizador
 function crearPrevisualizadorModal() {
   // Verificar si ya existe
   if (document.getElementById("qr-preview-modal")) return;
