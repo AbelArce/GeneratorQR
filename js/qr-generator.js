@@ -267,8 +267,8 @@ massiveInput.addEventListener("change", async (e) => {
       div.appendChild(qrDiv);
 
       const qrMassive = new QRCodeStyling({
-        width: 140,
-        height: 140,
+        width: 350,
+        height: 350,
         data,
         dotsOptions: { color: "#39d0db", type: "dots" },
         backgroundOptions: { color: "#ffffff" },
@@ -481,6 +481,7 @@ async function actualizarPrevisualizador() {
 }
 
 // Función para crear el modal del previsualizador
+// Función para crear el modal del previsualizador
 function crearPrevisualizadorModal() {
   // Verificar si ya existe
   if (document.getElementById("qr-preview-modal")) return;
@@ -495,7 +496,8 @@ function crearPrevisualizadorModal() {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(15, 15, 35, 0.95);
+    backdrop-filter: blur(15px);
     z-index: 2000;
     justify-content: center;
     align-items: center;
@@ -507,51 +509,88 @@ function crearPrevisualizadorModal() {
 
   modal.innerHTML = `
     <div style="
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 217, 255, 0.3);
+      border-radius: 20px;
+      padding: 2.5rem;
       max-width: 90vw;
       max-height: 90vh;
+      min-width: 500px;
       overflow: auto;
       position: relative;
+      box-shadow: 
+        0 25px 70px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     ">
       <!-- Botón cerrar -->
       <button id="qr-preview-close" style="
         position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #f44336;
-        color: white;
-        border: none;
+        top: 1rem;
+        right: 1.5rem;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         cursor: pointer;
         font-size: 18px;
+        font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
       ">×</button>
       
       <!-- Contador y datos -->
-      <div style="text-align: center; margin-bottom: 15px;">
-        <h3 style="margin: 0 0 10px 0;">QR #<span id="qr-preview-counter">1 / 1</span></h3>
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="
+          color: #00d9ff;
+          font-weight: 600;
+          font-size: 1.1rem;
+          background: rgba(15, 15, 35, 0.8);
+          padding: 0.75rem 1.5rem;
+          border-radius: 20px;
+          border: 1px solid rgba(0, 217, 255, 0.3);
+          backdrop-filter: blur(10px);
+          margin-bottom: 1rem;
+          display: inline-block;
+        ">
+          QR #<span id="qr-preview-counter">1 / 1</span>
+        </div>
         <p style="
           margin: 0;
-          font-size: 14px;
-          color: #666;
+          font-size: 0.9rem;
+          color: #e4e4e7;
           word-break: break-all;
           max-width: 400px;
+          margin: 0 auto;
+          background: rgba(15, 15, 35, 0.6);
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         " id="qr-preview-data"></p>
       </div>
       
       <!-- Imagen del QR con zoom -->
-      <div style="text-align: center; margin-bottom: 20px;">
+      <div style="
+        text-align: center; 
+        margin-bottom: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(0, 217, 255, 0.2);
+        border-radius: 16px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+      ">
         <img id="qr-preview-img" style="
           max-width: 100%;
           height: auto;
           cursor: zoom-in;
           transition: transform 0.3s ease;
+          border-radius: 8px;
         " />
       </div>
       
@@ -560,53 +599,79 @@ function crearPrevisualizadorModal() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 10px;
+        gap: 1rem;
+        flex-wrap: wrap;
       ">
         <!-- Navegación -->
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 0.75rem;">
           <button id="qr-preview-prev" style="
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
           ">← Anterior</button>
           
           <button id="qr-preview-next" style="
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
           ">Siguiente →</button>
         </div>
         
         <!-- Zoom y descarga -->
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 0.75rem;">
           <button id="qr-preview-zoom" style="
-            background: #FF9800;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            color: #ff9800;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
           ">🔍 Zoom</button>
           
           <button id="qr-preview-download" style="
-            background: #4CAF50;
-            color: white;
+            background: linear-gradient(135deg, #00d9ff, #0099cc);
+            color: #000;
             border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
           ">⬇️ Descargar</button>
         </div>
       </div>
     </div>
   `;
 
+
+  
   document.body.appendChild(modal);
 
   // Event listeners del previsualizador
