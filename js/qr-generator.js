@@ -816,3 +816,22 @@ document.addEventListener("DOMContentLoaded", () => {
     crearPrevisualizadorModal();
   }
 });
+
+document.getElementById("export-massive-btn").addEventListener("click", async () => {
+  const zip = new JSZip();
+
+  const canvases = massiveContainer.querySelectorAll("canvas");
+  if (canvases.length === 0) {
+    alert("No hay QRs generados para exportar");
+    return;
+  }
+
+  canvases.forEach((canvas, index) => {
+    const dataUrl = canvas.toDataURL("image/png");
+    const base64 = dataUrl.replace(/^data:image\/(png|jpg);base64,/, "");
+    zip.file(`qr_${index + 1}.png`, base64, { base64: true });
+  });
+
+  const content = await zip.generateAsync({ type: "blob" });
+  saveAs(content, "qr-masivos.zip");
+});
