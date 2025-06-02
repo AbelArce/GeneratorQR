@@ -3,117 +3,180 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>🛟 QR Generator</title>
-
-  <!-- Google AdSense -->
+  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+    <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5444270537723462"
     crossorigin="anonymous"></script>
-
-  <!-- Librería QR -->
-  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-
-  <!-- Estilos -->
-  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
 
-  <div class="sidebar">
-    <h1>QR Generator 🔥</h1>
-
-    <div class="form-group">
-      <label for="qr-text">Texto / URL</label>
-      <input type="search" id="qr-text" placeholder="https://ejemplo.com" value="" />
+  <header id="masthead" class="masthead">
+    <div class="masthead-container">
+      <h1 class="masthead-title">QR Generator 🔥</h1>
+      <nav class="masthead-nav">
+        <!-- Si luego quieres navegación, va aquí -->
+      </nav>
     </div>
-    <div class="form-group">
-      <label for="qr-logo">Logo personalizado</label>
-      <input type="file" id="qr-logo" accept="image/*" />
-    </div>
-    <div class="color-group">
-      <div class="form-group">
-        <label for="qr-color">Color del QR</label>
-        <input type="color" id="qr-color" value="#39d0db" />
-      </div>
+  </header>
 
-      <div class="form-group">
-        <label for="qr-bg-color">Color de fondo</label>
-        <input type="color" id="qr-bg-color" value="#ffffff" />
-      </div>
-    </div>
-
-    <div class="dot-eye-group">
-      <div class="form-group">
-        <label for="dot-type">Forma de puntos</label>
-        <select id="dot-type">
-          <option value="square">Cuadrado</option>
-          <option value="dots" selected>Puntos</option>
-          <option value="rounded">Redondeado</option>
-          <option value="extra-rounded">Súper redondeado</option>
-          <option value="classy">Elegante</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="eye-ball-type">Forma de ojos</label>
-        <select id="eye-ball-type">
-          <option value="square" selected>Cuadradas</option>
-          <option value="circle">Circulares</option>
-          <option value="extra-rounded">Redondeadas</option>
-        </select>
-      </div>
-    </div>
-
-
-    <div class="corner-animate-group">
-      <div class="form-group">
-        <label for="corner-type">Esquinas</label>
-        <select id="corner-type">
-          <option value="square">Cuadradas</option>
-          <option value="dot">Puntos</option>
-          <option value="extra-rounded" selected>Redondeadas</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="qr-animate">Animación</label>
-        <select id="qr-animate">
-          <option value="none" selected>Sin animación</option>
-          <option value="spin">Giro</option>
-          <option value="pulse">Pulso</option>
-          <option value="bounce">Rebote</option>
-        </select>
-      </div>
-    </div>
-
-
-
-    <div class="size-group">
-      <div class="form-group">
-        <label for="qr-size">Tamaño (px)</label>
-        <input type="number" id="qr-size" value="140" min="100" max="600" />
-      </div>
-
-      <div class="form-group">
-        <label for="qr-margin">Margen (px)</label>
-        <input type="number" id="qr-margin" value="1" min="0" max="50" />
-      </div>
-    </div>
-
+  <div class="topbar">
+    <button id="tab-single" class="active">Generar QR texto / URL</button>
+    <button id="tab-massive">Generar QR masivo por archivo</button>
   </div>
 
-  <div class="preview">
-    <div id="qr-preview"></div>
-    <button id="download-btn" onclick="descargarQR()">Descargar PNG</button>
-    <footer>Hecho por Abel Salazar Arce (QA) - Perú</footer>
+  <!-- Sección QR unitario -->
+  <div id="single-qr-section" class="content-section active">
+    <div class="qr-creator-layout">
+      <div class="qr-creator-controls">
+        <div class="form-group">
+          <label for="qr-text">Texto / URL</label>
+          <input type="search" id="qr-text" placeholder="https://ejemplo.com" />
+        </div>
+        <div class="form-group">
+          <label for="qr-logo">Logo personalizado</label>
+          <input type="file" id="qr-logo" accept="image/*" />
+        </div>
+        <div class="color-group">
+          <div class="form-group">
+            <label for="qr-color">Color del QR</label>
+            <input type="color" id="qr-color" value="#39d0db" />
+          </div>
+          <div class="form-group">
+            <label for="qr-bg-color">Color de fondo</label>
+            <input type="color" id="qr-bg-color" value="#ffffff" />
+          </div>
+        </div>
+        <div class="dot-eye-group">
+          <div class="form-group">
+            <label for="dot-type">Forma de puntos</label>
+            <select id="dot-type">
+              <option value="square">Cuadrado</option>
+              <option value="dots" selected>Puntos</option>
+              <option value="rounded">Redondeado</option>
+              <option value="extra-rounded">Súper redondeado</option>
+              <option value="classy">Elegante</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="eye-ball-type">Forma de ojos</label>
+            <select id="eye-ball-type">
+              <option value="square" selected>Cuadradas</option>
+              <option value="circle">Circulares</option>
+              <option value="extra-rounded">Redondeadas</option>
+            </select>
+          </div>
+        </div>
+        <div class="corner-size-group">
+          <div class="form-group">
+            <label for="corner-type">Esquinas</label>
+            <select id="corner-type">
+              <option value="square">Cuadradas</option>
+              <option value="dot">Puntos</option>
+              <option value="extra-rounded" selected>Redondeadas</option>
+            </select>
+          </div>
+          <div class="size-group">
+            <div class="form-group">
+              <label for="qr-size">Tamaño (px)</label>
+              <input type="number" id="qr-size" value="140" min="100" max="600" />
+            </div>
+            <div class="form-group">
+              <label for="qr-margin">Margen (px)</label>
+              <input type="number" id="qr-margin" value="1" min="0" max="50" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-creator-display">
+        <div id="qr-code-canvas"></div>
+        <button id="download-btn" style="display:none;">Descargar PNG</button>
+        <footer>Hecho por Abel Salazar Arce (QA) - Perú</footer>
+      </div>
+    </div>
   </div>
 
+  <!-- Sección QR masivo -->
+  <div id="massive-qr-section" class="content-section">
+    <h2>Generar QR masivo desde archivo</h2>
+    <p>Sube un archivo TXT o CSV con una línea por cada texto/URL.</p>
+    <input type="file" id="file-massive" accept=".txt,.csv" />
+    <div id="massive-container"></div>
 
-  <!-- Lógica QR -->
+    <!-- Modal de configuración -->
+    <div id="qr-bulk-config-overlay" class="config-modal-overlay hidden">
+      <div class="config-modal-panel">
+        <span id="close-bulk-config" class="modal-close-button">&times;</span>
+        <h3>Personalizar QR Masivos</h3>
+
+        <div class="form-group">
+          <label for="bulk-qr-logo">Logo personalizado</label>
+          <input type="file" id="bulk-qr-logo" accept="image/*" />
+        </div>
+
+        <div class="config-inline-group">
+          <div class="form-group">
+            <label for="bulk-qr-color">Color del QR</label>
+            <input type="color" id="bulk-qr-color" value="#39d0db" />
+          </div>
+          <div class="form-group">
+            <label for="bulk-qr-bg-color">Color de fondo</label>
+            <input type="color" id="bulk-qr-bg-color" value="#ffffff" />
+          </div>
+        </div>
+
+        <div class="config-inline-group">
+          <div class="form-group">
+            <label for="bulk-dot-type">Forma de puntos</label>
+            <select id="bulk-dot-type">
+              <option value="square">Cuadrado</option>
+              <option value="dots" selected>Puntos</option>
+              <option value="rounded">Redondeado</option>
+              <option value="extra-rounded">Súper redondeado</option>
+              <option value="classy">Elegante</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bulk-eye-type">Forma de ojos</label>
+            <select id="bulk-eye-type">
+              <option value="square">Cuadradas</option>
+              <option value="circle">Circulares</option>
+              <option value="extra-rounded" selected>Redondeadas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="config-inline-group">
+          <div class="form-group">
+            <label for="bulk-size">Tamaño (px)</label>
+            <input type="number" id="bulk-size" value="140" min="100" max="600" />
+          </div>
+          <div class="form-group">
+            <label for="bulk-margin">Margen (px)</label>
+            <input type="number" id="bulk-margin" value="1" min="0" max="50" />
+          </div>
+        </div>
+
+        <button id="save-bulk-config" class="config-save-button">
+          Guardar configuración
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aquí sí, los scripts al final para que todo el DOM esté listo -->
   <script src="js/qr-generator.js"></script>
+  <script>
+    animarBotonFlotante();
+  </script>
 
+  <script src="js/app.js"></script>
 
+  
 </body>
 
 </html>
