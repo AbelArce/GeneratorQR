@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+  background: linear-gradient(135deg, #0f0f2300 0%, #1a1a2e00 100%);
   color: #e4e4e7;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100vh;
@@ -20,7 +20,7 @@ body {
 
 /* Header/Masthead */
 .masthead {
-  background: rgba(15, 15, 35, 0.95);
+  background: #010409;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
@@ -55,12 +55,13 @@ body {
 
 /* Barra de tabs */
 .topbar {
-  background: rgba(26, 26, 46, 0.8);
+  background: #0d111700;
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  /*border-bottom: 1px solid rgba(255, 255, 255, 0.1);*/
   padding: 1rem;
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   justify-content: center;
   overflow-x: auto;
   scrollbar-width: none;
@@ -109,6 +110,11 @@ body {
 .content-section.active {
   display: block;
 }
+
+/* Botones dentro de la cabecera*/
+
+
+/* fin botones dentro de cabecera*/
 
 /* Layout para QR individual */
 .qr-creator-layout {
@@ -707,6 +713,6 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #6a0dad; /* Tu morado sexy */
+  background-color: #0d1117;
   color: white;
 }
